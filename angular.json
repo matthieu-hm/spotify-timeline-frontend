@@ -33,6 +33,14 @@
             "scripts": []
           },
           "configurations": {
+            "local": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -69,6 +77,9 @@
             "browserTarget": "spotify-timeline:build"
           },
           "configurations": {
+            "local": {
+              "browserTarget": "spotify-timeline:build:local"
+            },
             "production": {
               "browserTarget": "spotify-timeline:build:production"
             }
@@ -117,6 +128,9 @@
             "devServerTarget": "spotify-timeline:serve"
           },
           "configurations": {
+            "local": {
+              "devServerTarget": "spotify-timeline:serve:local"
+            },
             "production": {
               "devServerTarget": "spotify-timeline:serve:production"
             }
