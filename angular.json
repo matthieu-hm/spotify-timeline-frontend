@@ -137,6 +137,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "spotify-timeline"
+    }
+  },
+  "defaultProject": "spotify-timeline",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

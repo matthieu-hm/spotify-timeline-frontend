@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 
 import { AppCommonModule } from './modules/app-common/app-common.module';
+import { AppStoreModule } from './modules/app-store/app-store.module';
 import { AuthModule } from './modules/auth/auth.module';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -19,6 +20,7 @@ import { WindowPopupService } from './services/window-popup.service';
     AppRoutingModule,
     HttpClientModule,
     AppCommonModule.forRoot(),
+    AppStoreModule,
     AuthModule,
   ],
   providers: [
