@@ -8,7 +8,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../../../environments/environment';
 
 import { reducers, metaReducers } from './reducers';
-import { AppEffects } from './effects/app.effects';
+import { ArtistEffects } from './effects/artist.effects';
+import { ArtistService } from './services/artist.service';
 
 @NgModule({
   declarations: [],
@@ -21,8 +22,13 @@ import { AppEffects } from './effects/app.effects';
       }
     }),
     StoreRouterConnectingModule.forRoot(),
-    EffectsModule.forRoot([AppEffects]),
+    EffectsModule.forRoot([
+      ArtistEffects
+    ]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
+  ],
+  providers: [
+    ArtistService
   ]
 })
 export class AppStoreModule { }
