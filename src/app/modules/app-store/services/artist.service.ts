@@ -9,12 +9,15 @@ export class ArtistService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getAllFollowed(): Observable<ArtistFollowedResponse> {
+  getAllFollowed(cursors?: { after: string; }): Observable<ArtistFollowedResponse> {
+    const cursorsParam = cursors ?? {};
+
     return this.httpClient
       .get<ArtistFollowedResponse>(
         'https://api.spotify.com/v1/me/following',
         {
           params: {
+            ...cursorsParam,
             type: 'artist'
           }
         }

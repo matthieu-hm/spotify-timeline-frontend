@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, exhaustMap, map } from 'rxjs/operators';
+import { catchError, exhaustMap, map, take, switchMap } from 'rxjs/operators';
 
-import { ArtistService } from '../services/artist.service';
 import * as artistActions from '../actions/artist.actions';
+import { ArtistFacade } from '../facades/artist.facade';
+import { ArtistService } from '../services/artist.service';
 
 
 
@@ -14,8 +15,11 @@ export class ArtistEffects {
   queryAllFollowed$ = createEffect(() =>
     this.actions$.pipe(
       ofType(artistActions.queryAllFollowed),
-      exhaustMap(action =>
-        this.artistService.getAllFollowed().pipe(
+      switchMap(() =>
+        this.artistFacade.cursors$.pipe(take(1))
+      ),
+      exhaustMap(cursors =>
+        this.artistService.getAllFollowed(cursors).pipe(
           map(artistsResponse => artistActions.queryAllFollowedSuccess(artistsResponse)),
           catchError(error => of(artistActions.queryAllFollowedError({ error })))
         )
@@ -25,6 +29,7 @@ export class ArtistEffects {
 
   constructor(
     private actions$: Actions,
+    private artistFacade: ArtistFacade,
     private artistService: ArtistService,
   ) {}
 
