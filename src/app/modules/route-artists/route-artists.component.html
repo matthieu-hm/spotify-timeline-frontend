@@ -1,1 +1,4 @@
-<p>route-artists works!</p>
+<h1>Artist <small class="text-muted">{{ totalLoaded$ | async }}/{{ total$ | async }}</small></h1>
+<div *ngFor="let artist of all$ | async">
+  <div>{{ artist.name }}</div>
+</div>

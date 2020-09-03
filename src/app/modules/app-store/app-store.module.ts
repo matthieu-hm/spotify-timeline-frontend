@@ -10,6 +10,7 @@ import { environment } from '../../../environments/environment';
 import { reducers, metaReducers } from './reducers';
 import { ArtistEffects } from './effects/artist.effects';
 import { ArtistService } from './services/artist.service';
+import { ArtistFacade } from './facades/artist.facade';
 
 @NgModule({
   declarations: [],
@@ -28,7 +29,8 @@ import { ArtistService } from './services/artist.service';
     !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [
-    ArtistService
+    ArtistService,
+    ArtistFacade,
   ]
 })
 export class AppStoreModule { }

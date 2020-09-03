@@ -1,4 +1,4 @@
-import { Action, createReducer, on } from '@ngrx/store';
+import { Action, createReducer, on, createFeatureSelector, createSelector } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
 import { Artist } from '../models/artist';
@@ -18,6 +18,9 @@ export const initialState: State = adapter.getInitialState({
   total: null
 });
 
+// REDUCER
+// ------
+
 const artistReducer = createReducer(
   initialState,
   on(
@@ -35,3 +38,38 @@ const artistReducer = createReducer(
 export function reducer(state: State | undefined, action: Action): State {
   return artistReducer(state, action);
 }
+
+// SELECTORS
+// ------
+
+const featureSelector = createFeatureSelector<State>('artists');
+
+export const selectIds = createSelector(
+  featureSelector,
+  adapter.getSelectors().selectIds // shorthand for state => adapter.getSelectors().selectIds(state)
+);
+
+export const selectEntities = createSelector(
+  featureSelector,
+  adapter.getSelectors().selectEntities
+);
+
+export const selectAll = createSelector(
+  featureSelector,
+  adapter.getSelectors().selectAll
+);
+
+export const selectTotalLoaded = createSelector(
+  featureSelector,
+  adapter.getSelectors().selectTotal
+);
+
+export const selectCursors = createSelector(
+  featureSelector,
+  state => state.cursors
+);
+
+export const selectTotal = createSelector(
+  featureSelector,
+  state => state.total
+);

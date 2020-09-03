@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { State } from '../app-store/reducers';
-import { Store } from '@ngrx/store';
-import * as artistActions from '../app-store/actions/artist.actions';
+
+import { ArtistFacade } from '../app-store/facades/artist.facade';
 
 @Component({
   selector: 'app-route-artists',
@@ -10,15 +9,18 @@ import * as artistActions from '../app-store/actions/artist.actions';
 })
 export class RouteArtistsComponent implements OnInit {
 
-  constructor(private store: Store<State>) { }
+  public all$;
+  public totalLoaded$;
+  public total$;
+
+  constructor(private artistFacade: ArtistFacade) {
+    this.all$ = this.artistFacade.all$;
+    this.totalLoaded$ = this.artistFacade.totalLoaded$;
+    this.total$ = this.artistFacade.total$;
+  }
 
 
   ngOnInit() {
-    this.getFollowedArtists();
+    this.artistFacade.queryAllFollowed();
   }
-
-  getFollowedArtists() {
-    this.store.dispatch(artistActions.queryAllFollowed());
-  }
-
 }
