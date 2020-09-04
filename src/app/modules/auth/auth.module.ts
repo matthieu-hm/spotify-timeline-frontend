@@ -1,14 +1,25 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
+
+import { AuthFacade } from '../app-store/facades/auth.facade';
 
 import { AuthService } from './auth.service';
 import { TokenInterceptor } from './token.interceptor';
+import { authInitializer } from './auth.initializer';
 import { LoginButtonComponent } from './login-button/login-button.component';
+import { LogoutButtonComponent } from './logout-button/logout-button.component';
 
 @NgModule({
-  declarations: [LoginButtonComponent],
-  exports: [LoginButtonComponent],
+  declarations: [
+    LoginButtonComponent,
+    LogoutButtonComponent
+  ],
+  exports: [
+    LoginButtonComponent,
+    LogoutButtonComponent
+  ],
   imports: [
     CommonModule
   ],
@@ -18,7 +29,16 @@ import { LoginButtonComponent } from './login-button/login-button.component';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: authInitializer,
+      multi: true,
+      deps: [
+        AuthFacade,
+        CookieService,
+      ]
+    },
   ]
 })
 export class AuthModule { }
