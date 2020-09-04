@@ -8,16 +8,13 @@ import { AuthFacade } from '../app-store/facades/auth.facade';
 import { AuthService } from './auth.service';
 import { TokenInterceptor } from './token.interceptor';
 import { authInitializer } from './auth.initializer';
-import { LoginButtonComponent } from './login-button/login-button.component';
 import { LogoutButtonComponent } from './logout-button/logout-button.component';
 
 @NgModule({
   declarations: [
-    LoginButtonComponent,
     LogoutButtonComponent
   ],
   exports: [
-    LoginButtonComponent,
     LogoutButtonComponent
   ],
   imports: [

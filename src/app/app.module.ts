@@ -11,6 +11,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WindowPopupService } from './services/window-popup.service';
 
+import { AuthGuard } from './guards/auth.guard';
+import { NotAuthGuard } from './guards/not-auth.guard';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -26,6 +29,8 @@ import { WindowPopupService } from './services/window-popup.service';
   providers: [
     CookieService,
     WindowPopupService,
+    AuthGuard,
+    NotAuthGuard,
   ],
   bootstrap: [AppComponent]
 })
