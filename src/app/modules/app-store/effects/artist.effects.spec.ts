@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { ArtistEffects } from './artist.effects';
 
-describe('AppEffects', () => {
+describe('ArtistEffects', () => {
   let actions$: Observable<any>;
   let effects: ArtistEffects;
 

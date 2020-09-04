@@ -1,12 +1,13 @@
 import { Action, createReducer, on, createFeatureSelector, createSelector } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
-import { Artist } from '../models/artist';
+import { Artist } from '../models/artist.model';
+import { SpotifyCursor } from '../models/spotify-common-objects';
 import * as artistActions from '../actions/artist.actions';
 
 export interface State extends EntityState<Artist> {
   // additional entity state properties
-  cursors: { after: string; } | null;
+  cursors: SpotifyCursor | null;
   total: number | null;
 }
 

@@ -2,19 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { ArtistFollowedResponse } from '../models/artist';
+import { environment } from '../../../../environments/environment';
+
+import { ArtistFollowedPaging } from '../models/artist.model';
+import { SpotifyCursor } from '../models/spotify-common-objects';
 
 @Injectable({ providedIn: 'root' })
 export class ArtistService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getAllFollowed(cursors?: { after: string; }): Observable<ArtistFollowedResponse> {
+  getAllFollowed(cursors?: SpotifyCursor): Observable<ArtistFollowedPaging> {
     const cursorsParam = cursors ?? {};
 
     return this.httpClient
-      .get<ArtistFollowedResponse>(
-        'https://api.spotify.com/v1/me/following',
+      .get<ArtistFollowedPaging>(
+        environment.spotifyApiUrl + 'me/following',
         {
           params: {
             ...cursorsParam,
