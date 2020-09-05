@@ -10,16 +10,16 @@ import { AuthFacade } from '../../app-store/facades/auth.facade';
 })
 export class LoginButtonComponent {
 
-  public loginIsInProgress$: Observable<boolean>;
+  public isLoginPending$: Observable<boolean>;
 
   constructor(
-    private authfacade: AuthFacade,
+    private authFacade: AuthFacade,
   ) {
-    this.loginIsInProgress$ = this.authfacade.loginIsInProgress$;
+    this.isLoginPending$ = this.authFacade.isLoginPending$;
   }
 
   onClick(): void {
-    this.authfacade.openAuthModal();
+    this.authFacade.login();
   }
 
 }

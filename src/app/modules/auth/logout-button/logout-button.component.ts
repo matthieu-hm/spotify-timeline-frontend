@@ -9,11 +9,11 @@ import { AuthFacade } from '../../app-store/facades/auth.facade';
 export class LogoutButtonComponent {
 
   constructor(
-    private authfacade: AuthFacade,
+    private authFacade: AuthFacade,
   ) {}
 
   onClick(): void {
-    this.authfacade.logout();
+    this.authFacade.logout();
   }
 
 }

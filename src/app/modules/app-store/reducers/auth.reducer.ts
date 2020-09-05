@@ -2,23 +2,19 @@ import { Action, createReducer, on, createFeatureSelector, createSelector } from
 
 import { CurrentUser } from '../models/current-user.model';
 import * as authActions from '../actions/auth.actions';
-// import { AppTokens } from '../models/app-common-objects';
 
 export interface State {
-  // tokens: AppTokens;
   currentUser: CurrentUser | null;
-  getUserIsInProgress: boolean;
-  modalIsOpened: boolean;
+  isQueryCurrentUserPending: boolean;
+  isLoginPending: boolean;
+  isAuthenticated: boolean;
 }
 
 const initialState: State = {
-  // tokens: {
-  //   access: null,
-  //   refresh: null,
-  // },
   currentUser: null,
-  getUserIsInProgress: false,
-  modalIsOpened: false,
+  isQueryCurrentUserPending: false,
+  isLoginPending: false,
+  isAuthenticated: false,
 };
 
 // REDUCER
@@ -26,78 +22,88 @@ const initialState: State = {
 
 const authReducer = createReducer(
   initialState,
-  // on(
-  //   authActions.init,
-  //   (state, payload) => {
-  //     return {
-  //       ...state,
-  //       tokens: {
-  //         ...state.tokens,
-  //         access: payload.access,
-  //         refresh: payload.refresh,
-  //       }
-  //     };
-  //   }
-  // ),
   on(
-    authActions.openAuthModal,
-      (state, payload) => {
-        return {
-          ...state,
-          modalIsOpened: true,
-        };
-      }
+    authActions.init,
+    (state, payload) => {
+      return {
+        ...state,
+        isAuthenticated: (!!payload.access && !!payload.refresh),
+      };
+    }
   ),
   on(
-    authActions.closeAuthModal,
-      (state, payload) => {
-        return {
-          ...state,
-          modalIsOpened: false,
-        };
-      }
+    authActions.loginOpenModal,
+    (state, payload) => {
+      return {
+        ...state,
+        isLoginPending: true,
+      };
+    }
+  ),
+  on(
+    authActions.loginCloseModal,
+    (state, payload) => {
+      return {
+        ...state,
+        isLoginPending: false,
+      };
+    }
+  ),
+  on(
+    authActions.loginSuccess,
+    (state, payload) => {
+      return {
+        ...state,
+        isAuthenticated: true,
+      };
+    }
+  ),
+  on(
+    authActions.loginFail,
+    (state, payload) => {
+      return {
+        ...state,
+        isAuthenticated: false,
+      };
+    }
   ),
   on(
     authActions.queryCurrentUser,
-      (state, payload) => {
-        return {
-          ...state,
-          getUserIsInProgress: true,
-        };
-      }
+    (state, payload) => {
+      return {
+        ...state,
+        isQueryCurrentUserPending: true,
+      };
+    }
   ),
   on(
     authActions.queryCurrentUserSuccess,
-      (state, payload) => {
-        return {
-          ...state,
-          currentUser: payload.currentUser,
-          getUserIsInProgress: false,
-        };
-      }
+    (state, payload) => {
+      return {
+        ...state,
+        currentUser: payload.currentUser,
+        isQueryCurrentUserPending: false,
+      };
+    }
   ),
   on(
     authActions.queryCurrentUserError,
-      (state, payload) => {
-        return {
-          ...state,
-          getUserIsInProgress: false,
-        };
-      }
+    (state, payload) => {
+      return {
+        ...state,
+        isQueryCurrentUserPending: false,
+      };
+    }
   ),
   on(
     authActions.logout,
-      (state, payload) => {
-        return {
-          ...state,
-          // tokens: {
-          //   ...state.tokens,
-          //   access: null,
-          //   refresh: null,
-          // }
-          currentUser: null,
-        };
-      }
+    (state, payload) => {
+      return {
+        ...state,
+        currentUser: null,
+        isAuthenticated: false,
+      };
+    }
   ),
 );
 
@@ -117,20 +123,15 @@ export const selectCurrentUser = createSelector(
 
 export const selectIsAuthenticated = createSelector(
   featureSelector,
-  state => !!state.currentUser
+  state => state.isAuthenticated
 );
 
-export const selectModalIsOpened = createSelector(
+export const selectIsLoginPending = createSelector(
   featureSelector,
-  state => state.modalIsOpened
+  state => state.isLoginPending
 );
 
-export const selectGetUserIsInProgress = createSelector(
+export const selectIsQueryCurrentUserPending = createSelector(
   featureSelector,
-  state => state.getUserIsInProgress
-);
-
-export const selectLoginIsInProgress = createSelector(
-  featureSelector,
-  state => state.modalIsOpened || state.getUserIsInProgress
+  state => state.isQueryCurrentUserPending
 );

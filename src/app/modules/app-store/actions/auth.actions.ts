@@ -8,8 +8,12 @@ export const init = createAction(
   props<AppTokens>()
 );
 
-export const openAuthModal = createAction('[Auth] auth-modal/open');
-export const closeAuthModal = createAction('[Auth] auth-modal/close');
+export const login = createAction('[Auth] login');
+export const loginOpenModal = createAction('[Auth] login/open-modal');
+export const loginCloseModal = createAction('[Auth] login/close-modal');
+export const loginSuccess = createAction('[Auth] login/success');
+export const loginFail = createAction('[Auth] login/fail');
+export const loginCancel = createAction('[Auth] login/cancel');
 
 export const receivedUnauthenticatedResponse = createAction('[auth] received-unauthenticated-response');
 

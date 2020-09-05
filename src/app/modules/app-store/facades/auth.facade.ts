@@ -9,9 +9,8 @@ import { AppTokens } from '../models/app-common-objects';
 export class AuthFacade {
   currentUser$ = this.store.pipe(select(fromAuthReducers.selectCurrentUser));
   isAuthenticated$ = this.store.pipe(select(fromAuthReducers.selectIsAuthenticated));
-  modalIsOpened$ = this.store.pipe(select(fromAuthReducers.selectModalIsOpened));
-  getUserIsInProgress$ = this.store.pipe(select(fromAuthReducers.selectGetUserIsInProgress));
-  loginIsInProgress$ = this.store.pipe(select(fromAuthReducers.selectLoginIsInProgress));
+  isLoginPending$ = this.store.pipe(select(fromAuthReducers.selectIsLoginPending));
+  isQueryCurrentUserPending$ = this.store.pipe(select(fromAuthReducers.selectIsQueryCurrentUserPending));
 
   constructor(
     private store: Store<fromAuthReducers.State>
@@ -21,8 +20,8 @@ export class AuthFacade {
     this.store.dispatch(fromAuthActions.init(appTokens));
   }
 
-  openAuthModal(): void {
-    this.store.dispatch(fromAuthActions.openAuthModal());
+  login(): void {
+    this.store.dispatch(fromAuthActions.login());
   }
 
   queryCurrentUser(): void {
