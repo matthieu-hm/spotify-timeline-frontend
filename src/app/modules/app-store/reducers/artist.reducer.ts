@@ -25,7 +25,18 @@ export const initialState: State = adapter.getInitialState({
 const artistReducer = createReducer(
   initialState,
   on(
+    artistActions.queryAllFollowed,
+    (state, payload) => {
+      return adapter.removeAll({
+        ...state,
+        cursors: null,
+        total: null
+      });
+    }
+  ),
+  on(
     artistActions.queryAllFollowedSuccess,
+    artistActions.queryMoreAllFollowedSuccess,
     (state, payload) => {
       return adapter.upsertMany(payload.artists.items, {
         ...state,

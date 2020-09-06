@@ -16,6 +16,20 @@ export class ArtistEffects {
     this.actions$.pipe(
       ofType(artistActions.queryAllFollowed),
       switchMap(() =>
+        this.artistService
+          .getAllFollowed()
+          .pipe(
+            map(artistsResponse => artistActions.queryAllFollowedSuccess(artistsResponse)),
+            catchError(error => of(artistActions.queryAllFollowedError({ error })))
+          )
+      )
+    )
+  );
+
+  queryMoreAllFollowed$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(artistActions.queryMoreAllFollowed),
+      switchMap(() =>
         this.artistFacade.cursors$.pipe(take(1))
       ),
       switchMap(cursors =>

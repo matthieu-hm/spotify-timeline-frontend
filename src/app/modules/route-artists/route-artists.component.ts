@@ -27,6 +27,6 @@ export class RouteArtistsComponent implements OnInit {
   }
 
   onClick() {
-    this.artistFacade.queryAllFollowed();
+    this.artistFacade.queryMoreAllFollowed();
   }
 }

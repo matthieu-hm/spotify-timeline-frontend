@@ -18,4 +18,8 @@ export class ArtistFacade {
   public queryAllFollowed(): void {
     this.store.dispatch(fromArtistActions.queryAllFollowed());
   }
+
+  public queryMoreAllFollowed(): void {
+    this.store.dispatch(fromArtistActions.queryMoreAllFollowed());
+  }
 }
