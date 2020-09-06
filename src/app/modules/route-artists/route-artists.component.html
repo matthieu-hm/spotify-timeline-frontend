@@ -1,4 +1,17 @@
-<h1>Artist <small class="text-muted">{{ totalLoaded$ | async }}/{{ total$ | async }}</small></h1>
-<div *ngFor="let artist of all$ | async">
-  <div>{{ artist.name }}</div>
+<div class="container mb-4">
+  <h1 class="font-weight-bold">Artists <small class="text-muted">{{ totalLoaded$ | async }}/{{ total$ | async }}</small></h1>
+
+  <div *ngFor="let artist of all$ | async">
+    <div class="media mb-3">
+      <div class="artist-img" [style.backgroundImage]="'url(' + artist.images[2].url + ')'"></div>
+      <div class="media-body ml-3">
+        <h3 class="font-weight-bold">{{ artist.name }}</h3>
+        <div>{{ artist.followers.total | number }} followers</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <button type="button" class="btn btn-primary font-weight-bold text-uppercase" (click)="onClick()">Load more</button>
+  </div>
 </div>

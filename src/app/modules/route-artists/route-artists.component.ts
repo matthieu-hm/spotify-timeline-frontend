@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { ArtistFacade } from '../app-store/facades/artist.facade';
+import { Artist } from '../app-store/models/artist.model';
 
 @Component({
   selector: 'app-route-artists',
@@ -9,9 +11,9 @@ import { ArtistFacade } from '../app-store/facades/artist.facade';
 })
 export class RouteArtistsComponent implements OnInit {
 
-  public all$;
-  public totalLoaded$;
-  public total$;
+  public all$: Observable<Artist[]>;
+  public totalLoaded$: Observable<number>;
+  public total$: Observable<number>;
 
   constructor(private artistFacade: ArtistFacade) {
     this.all$ = this.artistFacade.all$;
@@ -21,6 +23,10 @@ export class RouteArtistsComponent implements OnInit {
 
 
   ngOnInit() {
+    this.artistFacade.queryAllFollowed();
+  }
+
+  onClick() {
     this.artistFacade.queryAllFollowed();
   }
 }
