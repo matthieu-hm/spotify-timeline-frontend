@@ -1,0 +1,13 @@
+@import "../../../../styles/variables";
+
+.app-topbar {
+  background-color: $gray-700;
+}
+
+.nav-pills .nav-link {
+  border-radius: 0;
+}
+
+.media .media-body {
+  line-height: .9;
+}

@@ -1,8 +1,10 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AppTopbarComponent } from './app-topbar/app-topbar.component';
+import { RouterModule } from '@angular/router';
 
 const declarationsToExport = [
-  //
+  AppTopbarComponent,
 ];
 
 const importsToExport = [
@@ -15,17 +17,19 @@ const providers = [
 
 @NgModule({
   declarations: [
-      ...declarationsToExport,
+    ...declarationsToExport,
   ],
   exports: [
-      // Exported Components
-      ...declarationsToExport,
+    // Exported Components
+    ...declarationsToExport,
 
-      // Exported modules
-      ...importsToExport,
+    // Exported modules
+    ...importsToExport,
   ],
   imports: [
-      ...importsToExport,
+    ...importsToExport,
+    CommonModule,
+    RouterModule,
   ],
   // providers: [
   //     // Providers should be set below (in forRoot())
