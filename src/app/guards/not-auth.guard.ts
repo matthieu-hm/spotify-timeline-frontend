@@ -12,8 +12,9 @@ export class NotAuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, routerState: RouterStateSnapshot): true | UrlTree {
     const accessToken = this.cookieService.get('access_token');
+    const refreshToken = this.cookieService.get('refresh_token');
 
-    if (!accessToken) {
+    if (!accessToken && !refreshToken) {
       return true;
     }
 

@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 
 import { CurrentUser } from '../app-store/models/current-user.model';
+import { AppRefreshTokenResponse } from '../app-store/models/app-common-objects';
 
 @Injectable({
   providedIn: 'root'
@@ -28,12 +29,14 @@ export class AuthService {
       );
   }
 
-  public refreshToken(): Observable<unknown> {
+  public refreshToken(): Observable<AppRefreshTokenResponse> {
     const refreshToken = this.cookieService.get('refresh_token');
 
-    // TODO: Error if try to refresh without refresh_token
+    if (!refreshToken) {
+      throwError('No refresh token');
+    }
 
-    return this.httpClient.get(
+    return this.httpClient.get<AppRefreshTokenResponse>(
       environment.appApiUrl + 'spotify-api/refresh-token',
       {
         params: {

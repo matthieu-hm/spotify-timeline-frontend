@@ -11,6 +11,7 @@ export class AuthFacade {
   isAuthenticated$ = this.store.pipe(select(fromAuthReducers.selectIsAuthenticated));
   isLoginPending$ = this.store.pipe(select(fromAuthReducers.selectIsLoginPending));
   isQueryCurrentUserPending$ = this.store.pipe(select(fromAuthReducers.selectIsQueryCurrentUserPending));
+  isRefreshTokenPending$ = this.store.pipe(select(fromAuthReducers.selectIsRefreshTokenPending));
 
   constructor(
     private store: Store<fromAuthReducers.State>
@@ -32,7 +33,7 @@ export class AuthFacade {
     this.store.dispatch(fromAuthActions.logout());
   }
 
-  receivedUnauthenticatedResponse(): void {
-    this.store.dispatch(fromAuthActions.receivedUnauthenticatedResponse());
+  refreshToken(): void {
+    this.store.dispatch(fromAuthActions.refreshToken());
   }
 }

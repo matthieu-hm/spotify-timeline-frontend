@@ -8,6 +8,7 @@ export interface State {
   isQueryCurrentUserPending: boolean;
   isLoginPending: boolean;
   isAuthenticated: boolean;
+  isRefreshTokenPending: boolean;
 }
 
 const initialState: State = {
@@ -15,6 +16,7 @@ const initialState: State = {
   isQueryCurrentUserPending: false,
   isLoginPending: false,
   isAuthenticated: false,
+  isRefreshTokenPending: false,
 };
 
 // REDUCER
@@ -27,7 +29,7 @@ const authReducer = createReducer(
     (state, payload) => {
       return {
         ...state,
-        isAuthenticated: (!!payload.access && !!payload.refresh),
+        isAuthenticated: (!!payload.access || !!payload.refresh),
       };
     }
   ),
@@ -64,6 +66,25 @@ const authReducer = createReducer(
       return {
         ...state,
         isAuthenticated: false,
+      };
+    }
+  ),
+  on(
+    authActions.refreshTokenSendRequest,
+    (state, payload) => {
+      return {
+        ...state,
+        isRefreshTokenPending: true,
+      };
+    }
+  ),
+  on(
+    authActions.refreshTokenSuccess,
+    authActions.refreshTokenError,
+    (state, payload) => {
+      return {
+        ...state,
+        isRefreshTokenPending: false,
       };
     }
   ),
@@ -134,4 +155,9 @@ export const selectIsLoginPending = createSelector(
 export const selectIsQueryCurrentUserPending = createSelector(
   featureSelector,
   state => state.isQueryCurrentUserPending
+);
+
+export const selectIsRefreshTokenPending = createSelector(
+  featureSelector,
+  state => state.isRefreshTokenPending
 );

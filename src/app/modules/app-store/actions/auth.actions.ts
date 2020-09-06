@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { AppTokens } from '../models/app-common-objects';
+import { AppTokens, AppRefreshTokenResponse } from '../models/app-common-objects';
 import { CurrentUser } from '../models/current-user.model';
 
 export const init = createAction(
@@ -15,7 +15,17 @@ export const loginSuccess = createAction('[Auth] login/success');
 export const loginFail = createAction('[Auth] login/fail');
 export const loginCancel = createAction('[Auth] login/cancel');
 
-export const receivedUnauthenticatedResponse = createAction('[auth] received-unauthenticated-response');
+export const refreshToken = createAction('[auth] refresh-token');
+export const refreshTokenSendRequest = createAction('[auth] refresh-token/send-request');
+export const refreshTokenSuccess = createAction(
+  '[auth] refresh-token/success',
+  props<AppRefreshTokenResponse>()
+);
+export const refreshTokenError = createAction(
+  '[auth] refresh-token/error',
+  props<any>()
+);
+export const refreshTokenCancel = createAction('[auth] refresh-token/cancel');
 
 export const queryCurrentUser = createAction('[Auth] query-current-user');
 export const queryCurrentUserSuccess = createAction(

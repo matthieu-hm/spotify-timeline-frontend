@@ -6,7 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AuthFacade } from '../app-store/facades/auth.facade';
 
 import { AuthService } from './auth.service';
-import { TokenInterceptor } from './token.interceptor';
+import { SpotifyTokensInterceptor } from './spotify-tokens.interceptor';
 import { authInitializer } from './auth.initializer';
 import { LogoutButtonComponent } from './logout-button/logout-button.component';
 
@@ -24,7 +24,7 @@ import { LogoutButtonComponent } from './logout-button/logout-button.component';
     AuthService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
+      useClass: SpotifyTokensInterceptor,
       multi: true
     },
     {

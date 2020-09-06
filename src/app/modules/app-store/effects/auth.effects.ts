@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap, take } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 
@@ -11,6 +11,7 @@ import * as authActions from '../actions/auth.actions';
 import { AuthService } from '../../auth/auth.service';
 import { WindowPopupService } from 'src/app/services/window-popup.service';
 import { CookieService } from 'ngx-cookie-service';
+import { AuthFacade } from '../facades/auth.facade';
 
 
 @Injectable()
@@ -113,12 +114,54 @@ export class AuthEffects {
   );
 
   @Effect()
-  receiveUnauthenticatedResponse$ = this.actions$.pipe(
-    ofType(authActions.receivedUnauthenticatedResponse),
-    map(action => {
-      // TODO: Try refresh token
-      return authActions.logout();
+  refreshToken$ = this.actions$.pipe(
+    ofType(authActions.refreshToken),
+    switchMap(() => this.authFacade.isRefreshTokenPending$),
+    take(1),
+    map(isRefreshTokenPending => {
+      if (isRefreshTokenPending) {
+        return authActions.refreshTokenCancel();
+      }
+
+      return authActions.refreshTokenSendRequest();
     })
+  );
+
+  @Effect()
+  refreshTokenSendRequest$ = this.actions$.pipe(
+    ofType(authActions.refreshTokenSendRequest),
+    switchMap(action => {
+      return this.authService
+        .refreshToken()
+        .pipe(
+          map(response => {
+            // Update cookie here because if we do after refreshTokenSuccess action
+            // the reducer is executed before,
+            // so isRefreshTokenPending become `false` before the access_token is update
+
+            // Update access token
+            const accessTokenExpireDate = new Date();
+            accessTokenExpireDate.setSeconds(accessTokenExpireDate.getSeconds() + response.expires_in);
+            this.cookieService.set('access_token', response.access_token, accessTokenExpireDate);
+
+            // Extend refresh token life time
+            const refreshTokenExpireDate = new Date();
+            const refreshTokenExpireIn = 60 * 60 * 24 * 7 * 2; // 2 weeks
+            const refreshToken = this.cookieService.get('refresh_token');
+            refreshTokenExpireDate.setSeconds(refreshTokenExpireDate.getSeconds() + refreshTokenExpireIn);
+            this.cookieService.set('refresh_token', refreshToken, refreshTokenExpireDate);
+
+            return authActions.refreshTokenSuccess(response);
+          }),
+          catchError(error => of(authActions.refreshTokenError(error)))
+        );
+    })
+  );
+
+  @Effect()
+  refreshTokenError$ = this.actions$.pipe(
+    ofType(authActions.refreshTokenError),
+    map(action => authActions.logout())
   );
 
   constructor(
@@ -126,6 +169,7 @@ export class AuthEffects {
     private actions$: Actions,
     private router: Router,
     private authService: AuthService,
+    private authFacade: AuthFacade,
     private windowPopupService: WindowPopupService,
     private cookieService: CookieService,
   ) {}
