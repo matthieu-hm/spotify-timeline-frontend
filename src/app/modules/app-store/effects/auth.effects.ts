@@ -74,7 +74,8 @@ export class AuthEffects {
   loginSuccess$ = this.actions$.pipe(
     ofType(authActions.loginSuccess),
     map(action => {
-      this.router.navigate(['/']);
+      // TODO: this.router.navigate(['/']);
+      this.router.navigate(['/artists']);
 
       return authActions.queryCurrentUser();
     })
